@@ -1,0 +1,122 @@
+---
+import { site } from '../site.config';
+import { withBase, stripBase } from '../lib/url';
+interface Props {
+  links?: { href: string; label: string }[];
+}
+const { links = [] } = Astro.props;
+const current = stripBase(Astro.url.pathname);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href={withBase('/')} aria-label={`${site.name} home`}>
+      <img src={withBase('/favicon.svg')} alt="" width="28" height="28" />
+      <span>{site.name}</span>
+    </a>
+    {
+      links.length > 0 && (
+        <nav aria-label="Primary" class="site-header__nav">
+          <ul class="nav">
+            {links.map((l) => (
+              <li>
+                <a href={withBase(l.href)} aria-current={current === l.href ? 'page' : undefined}>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 56px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    text-decoration: none;
+    /* Never lets the nav squeeze the wordmark into the logo (audit-2 N-1: "EverQRGenerator" with
+       no gap at 320px) — the brand keeps its natural size and the nav gives way instead. */
+    flex-shrink: 0;
+  }
+  .brand img {
+    /* Reserve the exact box regardless of image load/CSS timing (`height:auto` on the global img
+       reset alone left this flagged by Lighthouse as an unsized element and a CLS contributor). */
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+  /* The flex item that actually needs to shrink is the <nav> wrapper itself, not just the <ul>
+     inside it — a flex item's default min-width is `auto` (its content size), so without this the
+     nav still forced the header (and the whole page) wider than the viewport at narrow widths. */
+  .site-header__nav {
+    min-width: 0;
+  }
+  .nav {
+    display: flex;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+  /* Below ~640px the nav moves to its own full-width row instead of trying to fit beside the
+     brand on one line: that one-line squeeze is what caused a mobile CLS of 0.238 (P2-13, the nav
+     wrapping mid-layout after the web font swapped in) and, in the following fix, clipped/hid the
+     last nav item with no scroll affordance (audit-2 N-1). This two-row layout is decided by the
+     viewport width alone (a plain CSS breakpoint), so it does not depend on font metrics and does
+     not shift after the fonts finish loading. A fade-out mask hints that the row scrolls further. */
+  @media (max-width: 640px) {
+    .site-header__inner {
+      flex-wrap: wrap;
+      row-gap: 0;
+    }
+    .site-header__nav {
+      flex-basis: 100%;
+    }
+    .nav {
+      padding-bottom: var(--space-2);
+      mask-image: linear-gradient(to right, #000 92%, transparent);
+    }
+  }
+  .nav a {
+    display: inline-block;
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    padding: var(--space-2) 0;
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] {
+    color: var(--fg);
+  }
+</style>

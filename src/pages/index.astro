@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import Share from '../components/Share.astro';
+import AdSlot from '../components/AdSlot.astro';
+import MoreTools from '../components/MoreTools.astro';
+import Generator from '../components/Generator';
+import { site } from '../site.config';
+import { webAppLd, howToLd } from '../lib/seo';
+import { absoluteUrl } from '../lib/url';
+import '../styles/tool.css';
+
+const title = `Free QR Code Generator — No Expiration Date`;
+const description = site.description;
+const updated = site.updated;
+
+const faqs = [
+  {
+    q: 'Do QR codes expire?',
+    a: 'The QR codes you make here do not. A "static" QR code stores the data itself (a URL, Wi-Fi details, text…) directly in the pattern, so it works for as long as the printed code is legible — there is no server, account or subscription involved. Some paid "QR code generator" services instead give you a code that points to <em>their</em> redirect link; if you stop paying, that code stops working even though the print looks identical. Use the <a href="' + import.meta.env.BASE_URL.replace(/\/$/, '') + '/check/">checker</a> to test a code you already printed.',
+  },
+  {
+    q: 'Is EverQR really free, with no account?',
+    a: 'Yes. Every content type, every export format and the bulk generator are free with no sign-up, no watermark and no scan limit. Everything runs in your browser: nothing you type is uploaded to a server.',
+  },
+  {
+    q: 'Which export format should I use for print?',
+    a: 'Export SVG for anything printed professionally (banners, signage, packaging) — it is vector art that stays crisp at any size. Export PNG for screens, presentations or when a tool only accepts raster images; use at least 512px for a code that will be printed.',
+  },
+  {
+    q: 'Can I add a logo to my QR code?',
+    a: 'Yes, from the style settings below the generator. Adding a logo automatically switches error correction to the highest level (H) so the code stays scannable even with part of it covered. Keep the logo under about a quarter of the code area and always test-scan the final print.',
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={[
+    webAppLd({ features: ['URL, Wi-Fi, vCard, email, SMS, phone, WhatsApp, geo and calendar QR codes', 'SVG and PNG export', 'Custom colours, module and eye styles', 'Optional logo overlay', 'Shareable design links'] }),
+    howToLd({
+      name: 'How to make a QR code that never expires',
+      description: 'Generate, style and export a static QR code in three steps, with no account and nothing uploaded.',
+      steps: [
+        { name: 'Pick a content type', text: 'Pick a content type and fill in the form — the preview updates instantly.' },
+        { name: 'Style it', text: 'Adjust colours, module/eye style, error correction and (optionally) a logo.' },
+        { name: 'Export', text: 'Export as SVG or PNG, or copy a link that reproduces the exact design.' },
+      ],
+    }),
+  ]}
+>
+  <section class="hero container">
+    <p class="eyebrow">Free · No sign-up · Never expires</p>
+    <h1>Free QR code generator — codes that never expire</h1>
+    <p class="lead">
+      Build a styled, static QR code for a URL, Wi-Fi network, contact card, WhatsApp chat and more. Everything is
+      generated in your browser and exported as vector SVG or PNG — no account, no watermark, no subscription that
+      can later switch it off.
+    </p>
+    <p class="muted small">Data updated: {updated}</p>
+  </section>
+
+  <section class="container" aria-label="QR code generator">
+    <Generator client:load />
+  </section>
+
+  <AdSlot slot="home-below-generator" minHeight={100} />
+
+  <section class="container container--narrow section">
+    <h2>How it works</h2>
+    <ol>
+      <li>Pick a content type and fill in the form — the preview updates instantly.</li>
+      <li>Adjust colours, module/eye style, error correction and (optionally) a logo.</li>
+      <li>Export as SVG or PNG, or copy a link that reproduces the exact design.</li>
+    </ol>
+    <p>
+      Need codes for a whole event, menu or class list? Use the <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/bulk/`}>bulk generator</a> to
+      turn a CSV into a ZIP of labelled codes. Already have a printed code and want to know if it can expire? Try the{' '}
+      <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/check/`}>QR expiry checker</a>.
+    </p>
+    <Share url={absoluteUrl('/')} text={`${site.name}: ${site.tagline}`} />
+  </section>
+
+  <section class="container container--narrow">
+    <Faq items={faqs} />
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    max-width: 62ch;
+  }
+</style>

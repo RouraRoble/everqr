@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import Bulk from '../../components/Bulk';
+import { site } from '../../site.config';
+import { webAppLd } from '../../lib/seo';
+import { BULK_ROW_CAP } from '../../lib/qr/csv';
+import '../../styles/tool.css';
+
+const title = 'Bulk QR Code Generator — CSV to ZIP';
+const description = `Generate up to ${BULK_ROW_CAP} static QR codes at once from a CSV file (content,label). Download a ZIP of labelled PNG or SVG files, or a printable sheet. Free, runs in your browser.`;
+const updated = site.updated;
+
+const faqs = [
+  { q: 'What format should my CSV be in?', a: `Two columns: <code>content</code> and <code>label</code>. The content column is exactly what gets encoded (a URL, Wi-Fi string, etc.); the label becomes the file name and the caption on the printed sheet. A header row is optional — if omitted, the first column is treated as content and the second as the label.` },
+  { q: `Why is there a cap of ${BULK_ROW_CAP} rows?`, a: 'It keeps the browser responsive: every code is rendered as vector art on your device, with no server involved. For larger batches, split the CSV into files of up to ' + BULK_ROW_CAP + ' rows and run the tool again.' },
+  { q: 'Do the bulk codes expire?', a: 'No. Each one is a static code generated the same way as the main generator: the data is embedded in the pattern itself, so it keeps working with no account or subscription behind it.' },
+];
+---
+
+<Base title={title} description={description} jsonLd={webAppLd({ name: `${site.name} Bulk Generator`, url: '/bulk/', features: [`Up to ${BULK_ROW_CAP} QR codes per batch`, 'CSV or pasted input', 'ZIP export (PNG or SVG)', 'Printable label sheet'] })}>
+  <section class="hero container">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Bulk generator', url: '/bulk/' }]} />
+    <p class="eyebrow">Free · Up to {BULK_ROW_CAP} codes</p>
+    <h1>Bulk QR code generator</h1>
+    <p class="lead">Paste a list or upload a CSV of <code>content,label</code> and get a ZIP of labelled, static QR codes — or a ready-to-print sheet.</p>
+    <p class="muted small">Data updated: {updated}</p>
+  </section>
+
+  <section class="container" aria-label="Bulk QR code generator">
+    <Bulk client:load />
+  </section>
+
+  <AdSlot slot="bulk-below-tool" minHeight={100} />
+
+  <section class="container container--narrow section">
+    <Faq items={faqs} />
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-10) var(--space-6);
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    max-width: 62ch;
+  }
+</style>

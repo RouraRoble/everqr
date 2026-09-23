@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "do-qr-codes-expire",
+    "title": "Do QR Codes Expire?",
+    "description": "Short answer: a QR code pattern itself never expires or wears out. What can \"expire\" is the destination behind it — a dynamic-QR or link-shortener subscription that can be switched off."
+  },
+  {
+    "slug": "static-vs-dynamic-qr-codes",
+    "title": "Static vs Dynamic QR Codes",
+    "description": "A static QR code stores its data directly and never changes. A dynamic QR code stores a short redirect link you can retarget later — but only while you keep paying for the service."
+  },
+  {
+    "slug": "qr-code-size-and-print-dpi",
+    "title": "QR Code Size and Print DPI",
+    "description": "How big to print a QR code so it scans reliably: minimum size by scan distance, quiet-zone rules, resolution/DPI for print, and how data density and error correction affect all of it."
+  },
+  {
+    "slug": "qr-code-error-correction-levels",
+    "title": "QR Code Error Correction Levels Explained",
+    "description": "What L, M, Q and H actually mean, how much damage each level tolerates, and which one to pick for a plain link versus a code with a logo or one that will get scuffed, wet or printed small."
+  }
+]

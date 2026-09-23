@@ -1,0 +1,104 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import { site } from '../../site.config';
+import { articleLd, faqLd, howToLd } from '../../lib/seo';
+import { withBase } from '../../lib/url';
+
+const title = 'QR Code Size and Print DPI';
+const description = 'Print a QR code at least 1/10th of the scan distance across, at 300 DPI or more, with a quiet zone of at least 4 modules on every side so it scans reliably.';
+const updated = site.updated;
+const published = '2026-09-23';
+
+const faqs = [
+  { q: 'What is the minimum size for a QR code?', a: 'A common rule is: printed width ≥ scan distance ÷ 10. So a code read from arm\'s length (about 25–30cm) should be at least 2.5–3cm across; a code on a poster read from 2m away should be at least 20cm across.' },
+  { q: 'What resolution/DPI should I export at?', a: 'For print, export at 300 DPI or higher at the final printed size. Our PNG export goes up to 4096px, which at 300 DPI covers a code up to roughly 34cm (13.6in) square; for anything larger, export SVG instead, since vector art scales to any size with no quality loss.' },
+  { q: 'What is the quiet zone and why does it matter?', a: 'The quiet zone is the blank margin around the code with no other graphics or text. Scanners use it to detect where the pattern starts; without at least 4 modules of margin, many scanners fail even though the code itself is undamaged. Our margin setting defaults to 4, the spec-recommended minimum.' },
+  { q: 'Does more data make the code harder to scan?', a: 'Yes. More characters need a higher QR "version" (a denser grid of modules), which shrinks each individual module at a given print size — so a long URL needs to be printed larger than a short one to stay reliably scannable. Shortening the destination URL, or using your own short domain, keeps the code simpler.' },
+  { q: 'Does error correction level change the size needed?', a: 'Higher error correction (Q or H) adds more redundant data, which also increases module density for the same content — useful if the code might get scuffed or partially covered by a logo, but it means printing slightly larger for the same reliability. Level M is a good default; use Q/H mainly when adding a logo or expecting wear.' },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  image="/og/guide/qr-code-size-and-print-dpi.png"
+  jsonLd={[
+    articleLd({ headline: title, description, url: '/guide/qr-code-size-and-print-dpi/', datePublished: published, dateModified: updated }),
+    faqLd(faqs.map((f) => ({ q: f.q, a: f.a }))),
+    howToLd({
+      name: 'How to test a QR code before printing it in bulk',
+      description: 'Three checks to run on a single test print before committing a design to a full print run.',
+      steps: [
+        { name: 'Print one test copy at final size', text: 'Print one test copy at final size on the actual paper/material.' },
+        { name: 'Scan with two different phones', text: 'Scan it with at least two different phones, from the real expected distance and angle.' },
+        { name: 'Re-check after finishing', text: 'Check it still scans after any lamination, embossing or colour printing pass.' },
+      ],
+    }),
+  ]}
+>
+  <article class="container container--narrow section prose">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Guides', url: '/guide/' }, { name: title, url: '/guide/qr-code-size-and-print-dpi/' }]} />
+    <p class="eyebrow">Guide</p>
+    <h1>{title}</h1>
+    <p class="muted small">Last updated: {updated}</p>
+
+    <p>
+      <strong>Print a QR code at least a tenth of its intended scan distance across, at 300 DPI or higher, with a
+      quiet (blank) margin of at least 4 modules on every side.</strong> Get any of those three wrong — too small,
+      too low-resolution, or no margin — and scans start failing even though nothing looks obviously broken.
+    </p>
+
+    <h2>Minimum size by scan distance</h2>
+    <table>
+      <thead><tr><th>Scan distance</th><th>Example use</th><th>Minimum code width</th></tr></thead>
+      <tbody>
+        <tr><td>10–15cm</td><td>Business card, product label</td><td>2cm</td></tr>
+        <tr><td>25–30cm</td><td>Table tent, receipt, flyer held in hand</td><td>3cm</td></tr>
+        <tr><td>1m</td><td>Counter sign, door sticker</td><td>10cm</td></tr>
+        <tr><td>2m</td><td>Poster, window display</td><td>20cm</td></tr>
+        <tr><td>5m</td><td>Billboard, banner, bus-stop ad</td><td>50cm</td></tr>
+      </tbody>
+    </table>
+    <p class="small muted">Rule of thumb: width ≈ distance ÷ 10. Add margin for poor lighting, angled viewing or older phone cameras.</p>
+
+    <h2>Resolution for print</h2>
+    <p>
+      Export <strong>SVG</strong> whenever the file goes to a printer, packaging plant or large-format shop — it is
+      vector art, so it stays perfectly crisp at any size. If you need a raster file, export <strong>PNG</strong> at
+      300 DPI or more at the final size: our export goes up to 4096px, which covers roughly a 34cm square at 300
+      DPI. Never scale a small PNG up in a design tool — that blurs the edges between modules and hurts scan rates.
+    </p>
+
+    <h2>Quiet zone</h2>
+    <p>
+      The ISO/IEC 18004 spec calls for a quiet zone of at least 4 modules of plain background on every side, with no
+      logos, borders or text touching it. Our generator's margin setting defaults to 4 and can be adjusted up to 10
+      for codes that will sit close to other print elements.
+    </p>
+
+    <h2>Data length and error correction, in short</h2>
+    <p>
+      A longer payload (a long URL, a full vCard) needs a denser grid, which makes each module smaller at a given
+      print size — shorten the destination or use error correction level M rather than H unless you have a reason
+      (like a logo overlay) to need the extra redundancy; see the <a href={withBase('/guide/qr-code-error-correction-levels/')}>error correction levels guide</a>
+      for the full L/M/Q/H trade-off. See the <a href={withBase('/guide/static-vs-dynamic-qr-codes/')}>static vs dynamic guide</a>
+      if you're weighing a short redirect link against your full URL.
+    </p>
+
+    <h2>Before you print in bulk</h2>
+    <ol>
+      <li>Print one test copy at final size on the actual paper/material.</li>
+      <li>Scan it with at least two different phones, from the real expected distance and angle.</li>
+      <li>Check it still scans after any lamination, embossing or colour printing pass.</li>
+    </ol>
+
+    <Faq items={faqs} schema={false} />
+  </article>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>

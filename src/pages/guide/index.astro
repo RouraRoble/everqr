@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import guides from '../../data/guides.json';
+import { withBase } from '../../lib/url';
+import { site } from '../../site.config';
+import { webAppLd } from '../../lib/seo';
+
+interface Guide { slug: string; title: string; description: string }
+const items = guides as Guide[];
+const title = 'QR Code Guides';
+const description = 'Plain-language guides to how QR codes actually work: whether they expire, static vs dynamic codes, and how big to print one so it scans reliably.';
+const updated = site.updated;
+---
+
+<Base title={title} description={description} jsonLd={webAppLd({ name: `${site.name} Guides`, url: '/guide/', description })}>
+  <section class="hero container">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Guides', url: '/guide/' }]} />
+    <p class="eyebrow">Guides</p>
+    <h1>QR code guides</h1>
+    <p class="lead">{description}</p>
+    <p class="muted small">Last updated: {updated}</p>
+  </section>
+
+  <section class="container container--narrow section">
+    <ul class="usecase-list">
+      {items.map((g) => (
+        <li>
+          <a href={withBase(`/guide/${g.slug}/`)}>
+            <strong>{g.title}</strong>
+            <span class="muted small">{g.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: var(--space-10) var(--space-6); }
+  .lead { font-size: var(--text-lg); color: var(--fg-muted); max-width: 62ch; }
+  .usecase-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .usecase-list a {
+    display: flex; flex-direction: column; gap: var(--space-1);
+    padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    text-decoration: none; color: var(--fg);
+  }
+  .usecase-list a:hover { border-color: var(--accent); background: var(--accent-soft); }
+</style>

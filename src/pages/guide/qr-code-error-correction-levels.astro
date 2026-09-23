@@ -1,0 +1,101 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import { site } from '../../site.config';
+import { articleLd, faqLd, howToLd } from '../../lib/seo';
+import { withBase } from '../../lib/url';
+
+const title = 'QR Code Error Correction Levels Explained';
+const description = 'L, M, Q and H trade code density for damage tolerance: L survives about 7% of the pattern being unreadable, H survives about 30%. Here is which level to pick and why.';
+const updated = site.updated;
+const published = '2026-09-23';
+
+const faqs = [
+  { q: 'What do L, M, Q and H stand for?', a: 'They are the four error-correction levels defined by the QR spec (ISO/IEC 18004): Low, Medium, Quartile and High. Each one adds a different amount of redundant (repair) data alongside your actual content, using Reed-Solomon error correction — the same family of math used in CDs and DVDs.' },
+  { q: 'Which level should I use by default?', a: 'Level M (about 15% recoverable) is the spec\'s own recommended default and what most QR readers assume you mean if you don\'t say otherwise. It is a good balance for a plain link or short text on a code that will stay flat, clean and reasonably sized.' },
+  { q: 'When should I use a higher level like Q or H?', a: 'Use H whenever you add a logo overlay — our generator forces this automatically, since covering part of the pattern needs the extra redundancy to still decode. Also reach for Q or H if the code will be printed small, laminated, embossed, exposed to weather, or handled enough to pick up scuffs and fingerprints.' },
+  { q: 'Does a higher error correction level make the QR code itself bigger?', a: 'Yes, for the same content. More redundant data means more total data to fit, which can push the code into the next QR "version" (a denser grid with more modules), making each individual module smaller at a given print size. That is why H is not simply "better in every way" — see our size & print DPI guide for how module density affects minimum print size.' },
+  { q: 'Can I change the error correction level after generating a code?', a: 'Yes — it is just a generation setting, not something baked irreversibly into your data. Pick a new level in the generator\'s Style panel and export again; the visual pattern will look different (denser or sparser) even though the decoded content is identical.' },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  image="/og/guide/qr-code-error-correction-levels.png"
+  jsonLd={[
+    articleLd({ headline: title, description, url: '/guide/qr-code-error-correction-levels/', datePublished: published, dateModified: updated }),
+    faqLd(faqs.map((f) => ({ q: f.q, a: f.a }))),
+    howToLd({
+      name: 'How to choose a QR code error correction level',
+      description: 'Pick between L, M, Q and H based on how the printed code will be used.',
+      steps: [
+        { name: 'Start with M', text: 'Use Level M for a plain link or short text on a clean, flat, reasonably sized print — it is the spec\'s own recommended default.' },
+        { name: 'Add a logo? Use H', text: 'Adding a logo overlay covers part of the pattern, so switch to Level H (our generator does this automatically) for enough redundancy to still decode.' },
+        { name: 'Expect wear? Go up a level', text: 'For codes that will be laminated, embossed, exposed to weather, or handled enough to scuff, use Level Q or H so the extra redundancy absorbs the damage.' },
+        { name: 'Printing small? Go down a level if you can', text: 'If size is tight and the surface will stay clean and undamaged, Level L keeps the module count lowest for the same content, which helps small prints scan.' },
+      ],
+    }),
+  ]}
+>
+  <article class="container container--narrow section prose">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Guides', url: '/guide/' }, { name: title, url: '/guide/qr-code-error-correction-levels/' }]} />
+    <p class="eyebrow">Guide</p>
+    <h1>{title}</h1>
+    <p class="muted small">Last updated: {updated}</p>
+
+    <p>
+      <strong>Error correction level trades QR code density for damage tolerance:</strong> Level L can lose about
+      7% of its pattern and still decode correctly, up to about 30% for Level H. Higher levels are more forgiving
+      of scuffs, glare, low print resolution and logo overlays — but they also add more data to the same content,
+      which can make the printed code slightly denser at a given size.
+    </p>
+
+    <h2>The four levels</h2>
+    <table>
+      <thead><tr><th>Level</th><th>Approx. recoverable</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>L</strong> — Low</td><td>~7%</td><td>Maximum data per code / smallest print size; surface will stay clean</td></tr>
+        <tr><td><strong>M</strong> — Medium</td><td>~15%</td><td>Default for most links and text; the spec's own recommended level</td></tr>
+        <tr><td><strong>Q</strong> — Quartile</td><td>~25%</td><td>Codes handled often, outdoors, or moderately worn prints</td></tr>
+        <tr><td><strong>H</strong> — High</td><td>~30%</td><td>A logo overlay, industrial/harsh environments, or heavy expected wear</td></tr>
+      </tbody>
+    </table>
+    <p class="small muted">Percentages are approximate shares of the total codeword data that Reed-Solomon error correction can reconstruct if that portion of the pattern is unreadable — from smudges, glare, folds, low print resolution or a covering logo.</p>
+
+    <h2>Why "always use H" is not the safe default</h2>
+    <p>
+      Every level encodes exactly the same content — the choice only changes how much extra repair data rides
+      alongside it. That repair data has to fit somewhere, so a longer payload at a higher error correction level
+      can push the QR code into a larger "version" (more modules), which shrinks each individual module at a fixed
+      print size. A denser code that has never been damaged is, paradoxically, sometimes <em>harder</em> to scan
+      than a sparser one at the same physical size, because each module gets smaller and more sensitive to blur
+      and camera focus. See our <a href={withBase('/guide/qr-code-size-and-print-dpi/')}>size and print DPI guide</a>
+      for how module count relates to minimum print size.
+    </p>
+
+    <h2>How it interacts with a logo</h2>
+    <p>
+      Placing a logo over the middle of a QR code hides real data modules — those modules cannot help you unless
+      error correction can rebuild them from the rest of the pattern. That's why our generator automatically
+      switches to Level H the moment you add a logo, and caps the logo at about a quarter of the code's area:
+      beyond that, even the maximum 30% correction budget runs out and the code stops decoding reliably.
+    </p>
+
+    <h2>Quick picks</h2>
+    <ul>
+      <li><strong>Plain URL, no logo, clean print:</strong> Level M (the default).</li>
+      <li><strong>URL or vCard with a logo:</strong> Level H (automatic in this generator).</li>
+      <li><strong>Bulk labels that will be handled a lot (event badges, product tags):</strong> Level Q or H.</li>
+      <li><strong>Very long payload (full vCard with address, long URL) at a small print size:</strong> Level L, to keep the module count down — see the <a href={withBase('/guide/qr-code-size-and-print-dpi/')}>size guide</a> first.</li>
+    </ul>
+
+    <Faq items={faqs} schema={false} />
+  </article>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>

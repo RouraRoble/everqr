@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import Generator from '../../components/Generator';
+import usecases from '../../data/usecases.json';
+import { site } from '../../site.config';
+import { webAppLd, clampDescription } from '../../lib/seo';
+import { withBase, fixInternalLinks } from '../../lib/url';
+import { isContentType, type ContentType } from '../../lib/qr/payloads';
+import '../../styles/tool.css';
+
+export function getStaticPaths() {
+  return (usecases as Usecase[]).map((u) => ({ params: { slug: u.slug }, props: { u } }));
+}
+
+interface Usecase {
+  slug: string;
+  name: string;
+  contentType: string;
+  example?: string;
+  h1: string;
+  intro: string;
+  tips: string[];
+  faqs: { q: string; a: string }[];
+}
+
+const { u } = Astro.props as { u: Usecase };
+const contentType: ContentType = isContentType(u.contentType) ? u.contentType : 'url';
+const title = u.h1;
+const description = clampDescription(u.intro, 158);
+const others = (usecases as Usecase[]).filter((o) => o.slug !== u.slug).slice(0, 6);
+const updated = site.updated;
+/** "a" or "an" depending on whether the name starts with a vowel sound (good enough for our fixed list of names). */
+const article = (name: string) => (/^[aeiou]/i.test(name) ? 'an' : 'a');
+---
+
+<Base
+  title={title}
+  description={description}
+  image={`/og/qr-code-for/${u.slug}.png`}
+  jsonLd={webAppLd({ name: `QR code for ${u.name}`, url: `/qr-code-for/${u.slug}/`, features: [`Preselected ${u.name} form`, 'SVG and PNG export', 'Free, no account'] })}
+>
+  <section class="hero container">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'QR code for…', url: '/qr-code-for/' }, { name: u.name, url: `/qr-code-for/${u.slug}/` }]} />
+    <p class="eyebrow">Free · No sign-up · Never expires</p>
+    <h1>{u.h1}</h1>
+    <p class="lead" set:html={u.intro} />
+    <p class="muted small">Last updated: {updated}</p>
+  </section>
+
+  <section class="container" aria-label={`QR code generator for ${u.name}`}>
+    <Generator client:load defaultType={contentType} restoreLocal={false} />
+  </section>
+
+  <AdSlot slot={`usecase-${u.slug}`} minHeight={100} />
+
+  <section class="container container--narrow section prose">
+    <h2>Best practice for {article(u.name)} {u.name} QR code</h2>
+    <ul>
+      {u.tips.map((t) => <li set:html={fixInternalLinks(t)} />)}
+    </ul>
+
+    <Faq items={u.faqs.map((f) => ({ ...f, a: fixInternalLinks(f.a) }))} schema={true} />
+
+    <h2>More use cases</h2>
+    <ul>
+      {others.map((o) => (
+        <li><a href={withBase(`/qr-code-for/${o.slug}/`)}>QR code for {o.name}</a></li>
+      ))}
+      <li><a href={withBase('/qr-code-for/')}>See all use cases</a></li>
+    </ul>
+    <p class="small">
+      Want the background? Read <a href={withBase('/guide/do-qr-codes-expire/')}>do QR codes expire?</a> or browse all{' '}
+      <a href={withBase('/guide/')}>QR code guides</a>.
+    </p>
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-10) var(--space-6);
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    max-width: 68ch;
+  }
+</style>

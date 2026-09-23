@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import usecases from '../../data/usecases.json';
+import { withBase } from '../../lib/url';
+import { webAppLd } from '../../lib/seo';
+import { site } from '../../site.config';
+
+interface Usecase { slug: string; name: string; intro: string }
+const items = usecases as Usecase[];
+const title = 'QR Code For… Every Use Case';
+const description = 'Ready-made QR code generators for Wi-Fi, vCard, WhatsApp, Instagram, YouTube, Google reviews, PayPal, events and more — each preselects the right content type.';
+const updated = site.updated;
+---
+
+<Base title={title} description={description} jsonLd={webAppLd({ url: '/qr-code-for/' })}>
+  <section class="hero container">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'QR code for…', url: '/qr-code-for/' }]} />
+    <p class="eyebrow">Free · No sign-up · Never expires</p>
+    <h1>QR code generator for every use case</h1>
+    <p class="lead">Pick what you're linking to — each page preselects the right form and explains how to get the best results when printed.</p>
+    <p class="muted small">Last updated: {updated}</p>
+  </section>
+
+  <section class="container container--narrow section">
+    <ul class="usecase-list">
+      {items.map((u) => (
+        <li>
+          <a href={withBase(`/qr-code-for/${u.slug}/`)}>
+            <strong>QR code for {u.name}</strong>
+            <span class="muted small">{u.intro.replace(/<[^>]+>/g, '').slice(0, 110)}…</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="small">
+      Not sure which is static or dynamic? Read the <a href={withBase('/guide/static-vs-dynamic-qr-codes/')}>static vs dynamic guide</a>,
+      or browse all <a href={withBase('/guide/')}>QR code guides</a>.
+    </p>
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-10) var(--space-6);
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    max-width: 62ch;
+  }
+  .usecase-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .usecase-list a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .usecase-list a:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+</style>

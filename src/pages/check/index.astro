@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import Checker from '../../components/Checker';
+import { site } from '../../site.config';
+import { webAppLd, datasetLd } from '../../lib/seo';
+import { withBase, absoluteUrl } from '../../lib/url';
+import redirectDomains from '../../data/redirect-domains.json';
+import '../../styles/tool.css';
+
+const title = 'QR Code Checker — Will It Expire?';
+const description = 'Upload or scan a printed QR code to see exactly what it contains and whether it depends on a dynamic-QR subscription that could switch it off. Free, runs in your browser.';
+const updated = site.updated;
+const domainCount = (redirectDomains as unknown[]).length;
+
+const faqs = [
+  { q: 'How does the checker know if a QR code can expire?', a: 'It decodes the code locally and reads the raw payload. If the data itself is the content (text, Wi-Fi, a contact card…) it cannot expire. If it is a URL, the checker compares the domain against a maintained list of known dynamic-QR and link-shortening services — those redirect through the provider, so the code only works while that account is active. A URL pointing straight at a normal website works for as long as that website exists.' },
+  { q: 'Is my QR code image uploaded anywhere?', a: 'No. Decoding happens entirely in your browser with the jsQR library; the image never leaves your device.' },
+  { q: 'What do the warning flags mean?', a: 'The checker also flags plain http (not https) links, raw IP-address hosts, punycode domains and brand names stuffed into a subdomain — all common signs of a link that is not what it appears to be, independent of whether the code can expire.' },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={[
+    webAppLd({ name: `${site.name} Checker`, url: '/check/', features: ['Local QR decoding (no upload)', 'Static vs dynamic classification', 'Redirect-service database', 'Phishing-pattern flags'] }),
+    datasetLd({
+      name: 'EverQR redirect / dynamic-QR domain list',
+      description: `A maintained list of ${domainCount}+ domains used by dynamic-QR generators, link shorteners and link-in-bio services, each with a note on what happens if the subscription lapses. Used by the checker to classify a scanned URL. Compiled by ${site.author.name} from each provider's own public documentation — see the methodology page for sourcing and limits.`,
+      url: '/check/',
+      sourceUrl: absoluteUrl('/about/'),
+    }),
+  ]}
+>
+  <section class="hero container">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'QR expiry checker', url: '/check/' }]} />
+    <p class="eyebrow">Free · Decodes locally</p>
+    <h1>QR code checker: will it expire?</h1>
+    <p class="lead">Upload a photo of a printed QR code (or use your camera) to see what it actually contains, and whether it depends on a service that could stop working.</p>
+    <p class="muted small">Data updated: {updated} · {domainCount}+ known redirect/dynamic-QR domains</p>
+  </section>
+
+  <section class="container" aria-label="QR code checker">
+    <Checker client:load />
+  </section>
+
+  <AdSlot slot="check-below-tool" minHeight={100} />
+
+  <section class="container container--narrow section">
+    <h2>What the verdicts mean</h2>
+    <table>
+      <thead>
+        <tr><th>Verdict</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>✅ Cannot expire</td><td>The data (text, Wi-Fi, vCard, calendar event…) is stored directly in the pattern.</td></tr>
+        <tr><td>ℹ️ Points directly to a site</td><td>A normal URL with no redirect service in between — works while that page exists.</td></tr>
+        <tr><td>⚠️ Depends on a service</td><td>The code points to a dynamic-QR or link-shortening domain; it stops working if that account lapses.</td></tr>
+      </tbody>
+    </table>
+    <Faq items={faqs} />
+  </section>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-10) var(--space-6);
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    max-width: 62ch;
+  }
+</style>

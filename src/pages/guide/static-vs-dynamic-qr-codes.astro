@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import MoreTools from '../../components/MoreTools.astro';
+import { site } from '../../site.config';
+import { articleLd, faqLd } from '../../lib/seo';
+import { withBase } from '../../lib/url';
+
+const title = 'Static vs Dynamic QR Codes';
+const description = 'A static QR code stores its data directly and works forever. A dynamic one stores a redirect you can retarget later — but only while you keep paying for it.';
+const updated = site.updated;
+const published = '2026-09-23';
+
+const faqs = [
+  { q: 'Which one should I use?', a: 'Use a static code by default — for a URL you control, Wi-Fi, a contact card, or anything you will not need to redirect later. Only choose dynamic if you specifically need to change the destination after printing, or want scan-count analytics, and are willing to pay indefinitely for that.' },
+  { q: 'Can I convert a dynamic QR code to static?', a: 'Not by editing the existing code — you have to generate a brand-new static code with the final destination and replace the printed material. There is no way to "unlock" an existing dynamic code from its provider.' },
+  { q: 'Do dynamic codes look different from static ones?', a: 'No — visually a dynamic code looks exactly like a static one; the difference is only in the decoded text. That is why our <a href="' + withBase('/check/') + '">checker</a> looks at the actual payload rather than the image.' },
+  { q: 'Is a shortener like bit.ly the same as a "dynamic QR" service?', a: 'Functionally similar: both redirect through a domain you do not control. The difference is that dedicated dynamic-QR platforms usually add QR-specific features (design templates, scan analytics) on top of the same underlying redirect mechanism.' },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  image="/og/guide/static-vs-dynamic-qr-codes.png"
+  jsonLd={[
+    articleLd({ headline: title, description, url: '/guide/static-vs-dynamic-qr-codes/', datePublished: published, dateModified: updated }),
+    faqLd(faqs.map((f) => ({ q: f.q, a: f.a.replace(/<[^>]+>/g, '') }))),
+  ]}
+>
+  <article class="container container--narrow section prose">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Guides', url: '/guide/' }, { name: title, url: '/guide/static-vs-dynamic-qr-codes/' }]} />
+    <p class="eyebrow">Guide</p>
+    <h1>{title}</h1>
+    <p class="muted small">Last updated: {updated}</p>
+
+    <p>
+      <strong>A static QR code encodes your actual content and never changes; a dynamic QR code encodes a short
+      redirect link that a provider can repoint later.</strong> Static codes work forever, with no ongoing
+      dependency. Dynamic codes trade that permanence for the ability to change the destination, or see scan
+      counts, in exchange for an ongoing subscription.
+    </p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr><th>Property</th><th>Static</th><th>Dynamic</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Pattern contains</td><td>Your real content</td><td>A redirect URL on the provider's domain</td></tr>
+        <tr><td>Retarget after printing</td><td>No — reprint a new code</td><td>Yes, from the provider's dashboard</td></tr>
+        <tr><td>Works with no account</td><td>Yes</td><td>No — needs an active subscription</td></tr>
+        <tr><td>Scan analytics</td><td>None built in</td><td>Usually included</td></tr>
+        <tr><td>Cost over time</td><td>One-off (free here)</td><td>Recurring, often per-code</td></tr>
+        <tr><td>Risk if provider shuts down</td><td>None</td><td>Code stops working entirely</td></tr>
+        <tr><td>Data size limit</td><td>Whatever the content needs (≈3KB max)</td><td>Tiny — it's just a short redirect link</td></tr>
+      </tbody>
+    </table>
+
+    <h2>When static is the right default</h2>
+    <ul>
+      <li>Wi-Fi, contact cards, calendar events, phone numbers — content that doesn't change per-scan.</li>
+      <li>A link to a page you control and can update in place (your own website, a hosted PDF you can replace).</li>
+      <li>Print runs that must outlast a subscription decision — packaging, signage, business cards, event badges.</li>
+    </ul>
+
+    <h2>When dynamic can make sense</h2>
+    <ul>
+      <li>You need to A/B test or retarget the same printed poster without reprinting.</li>
+      <li>You want per-scan analytics (time, location, device) for a campaign.</li>
+      <li>The destination genuinely has not been decided yet at print time.</li>
+    </ul>
+    <p>
+      Related reading: <a href={withBase('/guide/do-qr-codes-expire/')}>do QR codes expire?</a> and, if you already
+      printed something and want to know which kind it is, the <a href={withBase('/check/')}>QR code checker</a>.
+    </p>
+
+    <Faq items={faqs} schema={false} />
+  </article>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>

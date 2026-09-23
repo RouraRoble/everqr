@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import MoreTools from '../components/MoreTools.astro';
+import { site } from '../site.config';
+import { withBase } from '../lib/url';
+import { articleLd } from '../lib/seo';
+const title = `About ${site.name}`;
+const description = `What ${site.name} does, how QR codes are generated and checked, data sources, and who maintains it.`;
+const updated = site.updated;
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={articleLd({ headline: title, description, url: '/about/', datePublished: site.launched, dateModified: updated })}
+>
+  <article class="container container--narrow section prose">
+    <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'About', url: '/about/' }]} />
+    <h1>{title}</h1>
+    <p class="muted small">Last updated: {updated}</p>
+    <p>{site.description}</p>
+
+    <h2>Methodology</h2>
+    <h3>Generating a QR code</h3>
+    <p>
+      The QR matrix (which modules are dark or light) is produced by <a href="https://github.com/soldair/node-qrcode" rel="noopener">node-qrcode</a>
+      (MIT licence), calling only its low-level <code>QRCode.create()</code> function — the exact algorithm defined by
+      ISO/IEC 18004, with no proprietary steps. Everything visual — module shape, eye style, colours, the quiet zone
+      and the optional logo overlay — is drawn by our own SVG renderer directly from that matrix, so the exported
+      SVG is exact vector art, not a rasterised approximation. PNG export rasterises that SVG on a &lt;canvas&gt;
+      at the size you choose. Content strings follow published, de-facto standards read by phone cameras and
+      ZXing-based scanners: <code>WIFI:</code> for Wi-Fi, vCard 3.0 (RFC 2426) for contact cards, a bare
+      <code>VEVENT</code> (RFC 5545 syntax) for calendar events, and the <code>mailto:</code> / <code>sms:</code> /
+      <code>tel:</code> / <code>geo:</code> URI schemes (RFC 6068, RFC 5724, RFC 3966, RFC 5870) for the rest.
+    </p>
+    <h3>Checking a QR code</h3>
+    <p>
+      The checker decodes an uploaded image with <a href="https://github.com/cozmo/jsQR" rel="noopener">jsQR</a>
+      (Apache-2.0), entirely in your browser — the image is never uploaded anywhere. The decoded text is then
+      classified: if it is not a web link (Wi-Fi, vCard, a calendar event, plain text…) it is marked "cannot
+      expire", since the data lives in the pattern itself. If it is a link, its domain is compared against
+      <code>src/data/redirect-domains.json</code>, a list we maintain of known dynamic-QR generators, link
+      shorteners and link-in-bio services (looked up from each service's own marketing/help pages describing what
+      they do); a match is marked "depends on that service", anything else is marked "points directly to a site".
+      The list is a best-effort snapshot, not exhaustive — a service missing from it will be classified as a direct
+      link even if it happens to be a redirect.
+    </p>
+    <h3>Contrast warning</h3>
+    <p>
+      The foreground/background contrast warning uses the WCAG 2.x relative-luminance formula on the sRGB values you
+      pick, and flags a ratio under 3:1 — QR scanners generally need clearer separation than the 4.5:1 threshold used
+      for body text, but codes closer to that ratio are noticeably less reliable in poor lighting.
+    </p>
+
+    <h2>Data sources &amp; licences</h2>
+    <ul>
+      <li><strong>QR matrix generation:</strong> <a href="https://github.com/soldair/node-qrcode" rel="noopener">qrcode</a> — MIT licence.</li>
+      <li><strong>QR decoding:</strong> <a href="https://github.com/cozmo/jsQR" rel="noopener">jsQR</a> — Apache-2.0 licence.</li>
+      <li><strong>ZIP export:</strong> <a href="https://github.com/Stuk/jszip" rel="noopener">JSZip</a> — MIT licence.</li>
+      <li><strong>Design-link compression:</strong> <a href="https://github.com/pieroxy/lz-string" rel="noopener">lz-string</a> — MIT/WTFPL.</li>
+      <li><strong>Redirect/dynamic-QR domain list:</strong> compiled by us from each provider's own public description of its service, current as of {updated}. Spot an error or a service we're missing? <a href={withBase('/contact/')}>Tell us</a> and we'll correct it.</li>
+      <li><strong>Fonts:</strong> Manrope (SIL Open Font License) via <a href="https://fontsource.org/" rel="noopener">Fontsource</a>, self-hosted.</li>
+    </ul>
+
+    <h2>Known limits</h2>
+    <ul>
+      <li>The redirect-domain list cannot be complete — new dynamic-QR services launch regularly. Use the decoded payload shown by the checker as the ground truth, not just the verdict label.</li>
+      <li>Very long content (long URLs, full vCards with an address) needs a denser QR code, which scans less reliably when printed small — see the <a href={withBase('/guide/qr-code-size-and-print-dpi/')}>size &amp; print DPI guide</a>.</li>
+      <li>A logo overlay hides real data modules; even at the highest error correction level, a logo that covers more than about a quarter of the code can make it unscannable on some readers. Always test-scan before printing in bulk.</li>
+      <li>Camera-based scanning in the checker depends on your browser and device supporting <code>getUserMedia</code> over HTTPS; if it isn't available, use the upload/drag-and-drop option instead.</li>
+    </ul>
+
+    <h2>Monetization</h2>
+    <p>
+      {site.name} is free with no account. Pages may show clearly labelled <code>&lt;AdSlot&gt;</code> placeholders
+      (they render nothing until an ad account is configured) and affiliate placeholders for print supplies —
+      disclosed in the footer of pages that carry them and never placed over the tool itself. No data you enter is
+      used for advertising targeting.
+    </p>
+
+    <h2>Privacy by design</h2>
+    <p>
+      {site.name} runs entirely in your browser. Inputs, uploaded images and generated codes are not uploaded to a
+      server, no account is needed, and there are no tracking cookies. See the <a href={withBase('/privacy/')}>privacy policy</a>.
+    </p>
+
+    <h2>Who maintains it</h2>
+    <p>
+      Built and maintained by <a href={site.author.url} rel="noopener">{site.author.name}</a>. Launched {site.launched}.
+      Found a bug, a misclassified domain, or have a suggestion? <a href={withBase('/contact/')}>Get in touch</a>.
+    </p>
+  </article>
+
+  <section class="container">
+    <MoreTools />
+  </section>
+</Base>

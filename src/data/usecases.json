@@ -1,0 +1,287 @@
+[
+  {
+    "slug": "wifi",
+    "name": "Wi-Fi",
+    "contentType": "wifi",
+    "h1": "QR code for Wi-Fi",
+    "intro": "A Wi-Fi QR code lets a phone camera join your network without typing the password: scan it and the device fills in the network name, security type and password automatically.",
+    "tips": [
+      "Use WPA/WPA2/WPA3 unless the router genuinely only supports WEP or is open.",
+      "Passwords are case-sensitive — copy them exactly, including symbols.",
+      "For a guest network, tick \"hidden\" only if you actually disabled SSID broadcast.",
+      "Print it near the router or at reception; laminate it if it will get handled a lot."
+    ],
+    "faqs": [
+      { "q": "Does the Wi-Fi QR code send my password anywhere?", "a": "No. The WIFI: string with your SSID and password is generated and encoded entirely in your browser; nothing is uploaded." },
+      { "q": "Will it work on both iPhone and Android?", "a": "Yes. Both the native camera apps (iOS 11+, Android 10+) and most third-party scanners understand the WIFI: format." },
+      { "q": "What if I change the Wi-Fi password later?", "a": "The old code will stop connecting — generate and print a new one. Because it is static, there is no way to update a printed code remotely." }
+    ]
+  },
+  {
+    "slug": "vcard",
+    "name": "vCard / contact card",
+    "contentType": "vcard",
+    "h1": "QR code for a vCard (contact card)",
+    "intro": "A vCard QR code puts your name, phone, email and company into a contact card that a scan can save directly to the recipient's phone contacts — no app or manual typing required.",
+    "tips": [
+      "Keep it to the essentials: name, phone, email, company. Long addresses make a denser, harder-to-scan code.",
+      "Test-scan on both iPhone and Android before printing business cards in bulk.",
+      "For a team, generate one vCard per person rather than a shared one, so caller ID and \"who scanned\" stay accurate.",
+      "Use error correction level Q or H if the card will be printed small (under 3cm)."
+    ],
+    "faqs": [
+      { "q": "What is the vCard format?", "a": "vCard 3.0 (RFC 2426) — the same standard address-book apps already use, so contacts import with the right fields instead of landing as one blob of text." },
+      { "q": "Can I include a photo?", "a": "Not in the QR code itself — embedding an image would make the code far too dense to scan reliably. Add the photo after import, or link to an online profile instead." },
+      { "q": "Does this replace a digital business card app?", "a": "It replaces the need for one for the core \"save my contact\" action — with no app, account or ongoing dependency on a third-party service." }
+    ]
+  },
+  {
+    "slug": "whatsapp",
+    "name": "WhatsApp",
+    "contentType": "whatsapp",
+    "h1": "QR code for WhatsApp",
+    "intro": "A WhatsApp QR code opens a chat with your number pre-filled — and, optionally, a starter message already typed in — the moment someone scans it.",
+    "tips": [
+      "Enter the number in full international format (e.g. +1 555 000 0000); the tool strips spaces and dashes automatically.",
+      "A short pre-filled message (\"Hi, I found you via the QR code\") makes it obvious why someone is messaging you.",
+      "This links to wa.me, WhatsApp's own click-to-chat service — not a third-party redirect, so it keeps working as long as WhatsApp does.",
+      "Test on a phone without WhatsApp installed too: it falls back to the WhatsApp web/download page."
+    ],
+    "faqs": [
+      { "q": "Does this require WhatsApp Business?", "a": "No, it works with a regular personal WhatsApp number as well as WhatsApp Business." },
+      { "q": "Can people see my number just from the QR code image?", "a": "The number is inside the encoded link (wa.me/<number>), so yes — anyone can decode the image and read it, the same as with any WhatsApp click-to-chat link." },
+      { "q": "Can I change the pre-filled message later?", "a": "Not on an already-printed code; generate a new one. The message is only a suggestion — the person can edit it before sending." }
+    ]
+  },
+  {
+    "slug": "instagram",
+    "name": "Instagram profile",
+    "contentType": "url",
+    "example": "https://instagram.com/yourhandle",
+    "h1": "QR code for your Instagram profile",
+    "intro": "Point a QR code straight at your Instagram profile URL (instagram.com/yourhandle) so a scan opens the app — or the web profile — directly, with no extra taps.",
+    "tips": [
+      "Use the full https://instagram.com/yourhandle URL, not just \"@yourhandle\".",
+      "This is a direct link, not a dynamic one: it keeps working for as long as your profile exists at that handle.",
+      "If you might rename your handle later, consider a link-in-bio page instead and point the QR at that — just know that adds a dependency on that service.",
+      "Add your logo to the code's centre (Style settings) to reinforce the brand at a glance."
+    ],
+    "faqs": [
+      { "q": "Will scanning open the Instagram app or a browser?", "a": "On a phone with Instagram installed, most camera apps hand the link to the app directly; otherwise it opens the profile in a browser." },
+      { "q": "Does this QR code expire?", "a": "No — it is a direct link to your profile URL, generated and stored entirely in the code. It only stops working if you delete or rename that profile." }
+    ]
+  },
+  {
+    "slug": "youtube",
+    "name": "YouTube video or channel",
+    "contentType": "url",
+    "example": "https://youtube.com/@yourchannel",
+    "h1": "QR code for a YouTube video or channel",
+    "intro": "Encode a YouTube video or channel URL so scanning jumps straight to your content — handy on posters, packaging or a presentation's closing slide.",
+    "tips": [
+      "Use the full canonical URL (youtube.com/watch?v=… or youtube.com/@handle), not a shortened youtu.be link if you want the address itself printed alongside the code.",
+      "For a specific moment, add &t=90s to start playback partway through.",
+      "A larger code (at least 3×3cm printed) scans more reliably against motion-graphics backgrounds.",
+      "Test the scan from across a room if it will be shown on a screen or projector."
+    ],
+    "faqs": [
+      { "q": "Does the QR code depend on YouTube staying up?", "a": "It depends only on the video or channel remaining at that URL — not on any third-party QR service. If YouTube ever removed the video, the code itself would still be valid, it would just lead nowhere." },
+      { "q": "Can I track how many people scanned it?", "a": "Not with a static code — there is no server in the loop to log scans. A dynamic/tracked code can do that, but then depends on that provider's subscription; see our <a href=\"/guide/static-vs-dynamic-qr-codes/\">static vs dynamic guide</a>." }
+    ]
+  },
+  {
+    "slug": "google-review",
+    "name": "Google review link",
+    "contentType": "url",
+    "example": "https://g.page/r/your-place-id/review",
+    "h1": "QR code to collect Google reviews",
+    "intro": "Turn your Google \"write a review\" link into a QR code on a receipt, table tent or counter card, so customers can leave a review in a couple of taps.",
+    "tips": [
+      "Get your review link from Google Business Profile → \"Ask for reviews\", or build one at g.page/r/&lt;place-id&gt;/review.",
+      "This is a direct Google URL, not a third-party redirect — it keeps working for as long as your Business Profile exists.",
+      "Place the code somewhere a satisfied customer naturally pauses: at checkout, on the receipt, or on the table.",
+      "Pair it with a one-line prompt (\"Enjoyed your visit? Scan to leave a review\") — a code with no context gets ignored."
+    ],
+    "faqs": [
+      { "q": "Is it against Google's policy to ask for reviews this way?", "a": "Asking customers to leave a review is allowed; offering money, discounts or gifts in exchange for a review, or filtering who gets asked based on expected rating, is not." },
+      { "q": "Where do I find my exact review link?", "a": "In Google Business Profile Manager, or by searching your business on Google Maps, opening the profile and copying the \"Write a review\" link." }
+    ]
+  },
+  {
+    "slug": "restaurant-menu",
+    "name": "Restaurant menu",
+    "contentType": "url",
+    "example": "https://yourrestaurant.com/menu",
+    "h1": "QR code for a restaurant menu",
+    "intro": "Link a table-top QR code straight to your menu page (or a hosted PDF) so guests can browse without a printed menu changing hands.",
+    "tips": [
+      "Host the menu at a URL you control (your own site or a PDF you own) rather than a third-party menu-builder, so the link does not depend on that company's subscription — see the <a href=\"/qr-code-for/pdf/\">PDF use case</a> if you only have a PDF file.",
+      "Make sure the destination page is mobile-friendly; most scans happen on a phone at the table.",
+      "Laminate table cards or use a scratch-resistant sticker — a scuffed code stops scanning.",
+      "Update the linked page for daily specials instead of reprinting the code each time."
+    ],
+    "faqs": [
+      { "q": "Will the QR code need reprinting if I change the menu?", "a": "No, as long as the underlying page URL stays the same — update the page's content and the same printed code keeps working." },
+      { "q": "Should I use a dynamic QR service so I can change the link later?", "a": "Only if you expect the destination URL itself to change (e.g. switching website providers). If you just update the page content, a static code to your own URL is simpler and cannot be switched off by a third party." }
+    ]
+  },
+  {
+    "slug": "wedding",
+    "name": "Wedding website / RSVP",
+    "contentType": "url",
+    "example": "https://yournames.wedding",
+    "h1": "QR code for a wedding website or RSVP",
+    "intro": "Add a QR code to invitations or signage that links guests straight to your wedding website — schedule, directions, registry and RSVP — without a long URL to type.",
+    "tips": [
+      "Use the final wedding-website URL, ideally one you'll keep live well past the day for photo-sharing and thank-yous.",
+      "Pick a foreground colour that matches your stationery from the style panel, and export SVG for high-quality printing on invitations.",
+      "Add a short line of context next to the code (\"Scan for details & RSVP\") — guests won't scan an unexplained square.",
+      "Test the scan on both iOS and Android before the invitations go to print."
+    ],
+    "faqs": [
+      { "q": "Which wedding-website builders work with a static code?", "a": "Any of them — as long as you link to the site's own URL, the QR code is independent of which builder you use and keeps working for as long as that page is live." },
+      { "q": "Can I use the same code for save-the-dates and invitations?", "a": "Yes, as long as the destination URL doesn't change between the two mailings." }
+    ]
+  },
+  {
+    "slug": "pdf",
+    "name": "PDF document",
+    "contentType": "url",
+    "example": "https://yoursite.com/files/document.pdf",
+    "h1": "QR code for a PDF file",
+    "intro": "Link a QR code to a PDF you host online (a menu, brochure, spec sheet or report) so a scan opens or downloads the document instantly.",
+    "tips": [
+      "Host the PDF somewhere stable that you control (your own site, or cloud storage with a public link) — the QR code itself never expires, but only if the link keeps working.",
+      "Keep the PDF under a few MB so it opens quickly on mobile data.",
+      "Most phone browsers preview PDFs inline; there's no need for a special \"PDF viewer\" service.",
+      "If the file will be replaced periodically, keep the same file name/URL so the same code stays valid."
+    ],
+    "faqs": [
+      { "q": "Can the QR code store the PDF itself?", "a": "No — a QR code can hold at most a couple of KB of data, far too little for a real PDF. It always links to a file hosted somewhere; make sure that hosting is reliable." },
+      { "q": "Does Google Drive or Dropbox work as the host?", "a": "Yes, using their public \"share\" link, though a link you fully control (your own domain) is more durable than relying on a personal cloud-storage account." }
+    ]
+  },
+  {
+    "slug": "event",
+    "name": "Calendar event",
+    "contentType": "event",
+    "h1": "QR code for a calendar event",
+    "intro": "An event QR code lets a scan add the date, time and location straight into someone's calendar app — no manual entry, no missed invite.",
+    "tips": [
+      "Double-check the time zone assumption: times are encoded as entered, without a time-zone offset, so make sure attendees are in the same zone or say so in the description.",
+      "Keep the title short; put full details (dress code, parking, links) in the description field.",
+      "For a recurring event, this generates a single occurrence — link to a calendar subscription instead if you need recurrence.",
+      "Print it on invitations, posters or a confirmation email footer."
+    ],
+    "faqs": [
+      { "q": "Which calendar apps support scanning this?", "a": "Any calendar or camera app that understands the standard VEVENT format — this includes the built-in iOS and Android camera apps and Google Calendar's scan-to-add flow." },
+      { "q": "Can I update the event after printing the code?", "a": "Not on that same printed code — it's static. If the date or venue changes, generate and redistribute a new code." }
+    ]
+  },
+  {
+    "slug": "paypal",
+    "name": "PayPal.me payment link",
+    "contentType": "url",
+    "example": "https://paypal.me/yourname/10",
+    "h1": "QR code for a PayPal.me link",
+    "intro": "Turn your paypal.me link into a scannable QR code so customers or friends can open a pre-filled payment request without typing your username.",
+    "tips": [
+      "Use your exact paypal.me/username link; add /amount at the end to pre-fill a fixed amount (e.g. paypal.me/yourname/10).",
+      "This links directly to PayPal, not through a third-party QR/payment redirect — it works for as long as your PayPal.me link is active.",
+      "Never encode card numbers, CVVs or bank details directly in a QR code; paypal.me links don't expose them, which is why they're a safer choice for print.",
+      "Put a short label next to the code (\"Tip / Pay here\") so the intent is unambiguous."
+    ],
+    "faqs": [
+      { "q": "Is it safe to publish a QR code with my PayPal.me link?", "a": "A paypal.me link only lets someone open a payment screen to you — it cannot pull money from your account, so it's safe to post publicly, the same as sharing the link itself." },
+      { "q": "Can I change the amount later?", "a": "Generate a new code for a different fixed amount, or omit the amount from the link so payers enter it themselves." }
+    ]
+  },
+  {
+    "slug": "spotify",
+    "name": "Spotify track, playlist or artist",
+    "contentType": "url",
+    "example": "https://open.spotify.com/playlist/yourid",
+    "h1": "QR code for a Spotify track, playlist or artist",
+    "intro": "Encode an open.spotify.com link so scanning opens a track, playlist or artist page directly in the Spotify app or web player.",
+    "tips": [
+      "Copy the share link from Spotify's own \"Share → Copy link\" menu (open.spotify.com/...) to make sure it's correct and current.",
+      "This is separate from Spotify's own built-in Scan Codes feature; ours produces a standard QR code any camera can read, styled to match your brand.",
+      "A playlist link can be updated on Spotify's side (tracks added/removed) without needing a new QR code, since the destination URL stays the same.",
+      "Great for event posters, packaging or merch — pair with an eye-catching colour from the style panel."
+    ],
+    "faqs": [
+      { "q": "Does this work with Apple Music or other services instead?", "a": "Yes — use the same URL type with a music.apple.com or other streaming link; the QR code generator works with any http/https URL." },
+      { "q": "Will the code still work if I delete the playlist?", "a": "No — like any direct link, it depends on that page continuing to exist. Deleting or making the playlist private breaks the link." }
+    ]
+  },
+  {
+    "slug": "tiktok",
+    "name": "TikTok profile",
+    "contentType": "url",
+    "example": "https://tiktok.com/@yourhandle",
+    "h1": "QR code for your TikTok profile",
+    "intro": "Link straight to your TikTok profile (tiktok.com/@yourhandle) so a scan opens your videos in the app immediately.",
+    "tips": [
+      "Use the full https://tiktok.com/@yourhandle URL rather than just the handle text.",
+      "This is a direct profile link, independent of TikTok's own in-app QR/code feature, and works in any camera app.",
+      "If your handle might change, double-check it right before printing — the code cannot be edited afterwards.",
+      "Pair the code with a short call to action (\"Follow us on TikTok\") for context."
+    ],
+    "faqs": [
+      { "q": "Is this the same as TikTok's in-app QR code?", "a": "No, but it points to the same destination. TikTok's in-app code is generated inside the app; this one is a standard QR code you can style, export as SVG/PNG and print anywhere." },
+      { "q": "Does it expire?", "a": "No — it's a direct link and only stops working if you rename or delete the profile." }
+    ]
+  },
+  {
+    "slug": "linkedin",
+    "name": "LinkedIn profile or company page",
+    "contentType": "url",
+    "example": "https://linkedin.com/in/yourname",
+    "h1": "QR code for a LinkedIn profile or company page",
+    "intro": "Add a QR code to a business card, resume or booth banner that links directly to your LinkedIn profile or company page.",
+    "tips": [
+      "Use your public profile URL (linkedin.com/in/yourname) exactly as shown on your LinkedIn \"Contact info\" panel.",
+      "For a company, use the /company/ page URL rather than a personal profile if the code is meant to represent the business.",
+      "This is a direct LinkedIn link, so it keeps working as long as the profile exists at that URL — no third-party service in between.",
+      "Combine with a vCard code on the reverse of a business card for both \"save contact\" and \"view profile\" in one card — see the <a href=\"/qr-code-for/vcard/\">vCard use case</a>."
+    ],
+    "faqs": [
+      { "q": "Can recruiters or contacts scan this without a LinkedIn account?", "a": "The public profile page is viewable without logging in (with limited detail); connecting or messaging still requires an account." },
+      { "q": "Will this code stop working if I change my LinkedIn URL slug?", "a": "Yes — LinkedIn keeps redirecting old vanity URLs for a while in many cases, but it's not guaranteed. Re-generate the code if you change your custom URL." }
+    ]
+  },
+  {
+    "slug": "email",
+    "name": "Email address",
+    "contentType": "email",
+    "h1": "QR code for an email address",
+    "intro": "An email QR code opens the scanner's default mail app with your address already in the \"To\" field — and, optionally, a pre-filled subject and message.",
+    "tips": [
+      "A pre-filled subject line (e.g. \"Question about…\") helps you triage incoming messages at a glance.",
+      "Keep the body short; it's a starting point the sender can edit, not a locked message.",
+      "This uses the standard mailto: link, so it opens whatever mail app is set as default on the scanning device.",
+      "Good for business cards, email signatures printed on letterhead, or support desks."
+    ],
+    "faqs": [
+      { "q": "Will this work if someone doesn't have a mail app configured?", "a": "If no default mail app is set, most phones will prompt to choose or set one up; a handful of browsers may show an error instead." },
+      { "q": "Does the QR code expose my email to spammers?", "a": "Anyone who decodes the image can read the address, the same as if it were printed as plain text — QR encoding does not hide or protect it." }
+    ]
+  },
+  {
+    "slug": "phone",
+    "name": "Phone number",
+    "contentType": "phone",
+    "h1": "QR code for a phone number",
+    "intro": "A phone QR code opens the dialer with your number pre-filled — one tap to call, no typing or saving a contact first.",
+    "tips": [
+      "Include the country code (e.g. +1, +44) so it dials correctly regardless of where the scanner is.",
+      "Good for \"call now\" signage, delivery vehicles, service stickers or classified ads.",
+      "This uses the standard tel: link, supported by every modern phone's camera app.",
+      "For a number people should save rather than just call once, use a <a href=\"/qr-code-for/vcard/\">vCard code</a> instead."
+    ],
+    "faqs": [
+      { "q": "Does this dial automatically when scanned?", "a": "No — it opens the phone's dialer with the number filled in; the person still has to tap call, so there's no risk of accidental dialing." },
+      { "q": "Can I include an extension?", "a": "Extensions aren't part of the tel: standard reliably across devices; put the base number in the code and mention the extension in nearby text instead." }
+    ]
+  }
+]
